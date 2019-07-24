@@ -7,6 +7,24 @@ ImageMagick (not the PHP bindings), and caches the generated thumbnails.
 It's still very much a work in progress, so use it in production environments at
 your own risk.
 
+# Fork
+
+The base project is no longer maintained so this fork fixes a production issue for me.
+
+First, an unrelated to this plugin, you may need to update your ImageMagick policy.xml. There
+was a security bandaid to address a Ghostscript vulnerability which prevents PDF to image conversions.
+
+See [KB](https://www.kb.cert.org/vuls/id/332928/)
+
+If you're sure you're patched, you need to change the following line in /etc/ImageMagick/policy.xml
+
+    <policy domain="coder" rights="read|write" pattern="PDF" />
+
+If rights says ```None``` then PDF conversion is disabled. Change to read|write to enable. If you see a different pattern, perhaps {PS,PDF,XPS} then update that line accordingly.
+
+Second, there was some path non-sense that even after updating the security policy was causing the convert operation to fail. Basically the
+```~``` and ```/``` handling seemed to have changed. There may be a better way to fix this so consider this patch a hack.
+
 ## Installation
 
 1. Download the ZIP file
